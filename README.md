@@ -127,4 +127,28 @@ AUDIT_REQUEST_POST_IGNORED = ('password', )
 Wazuh configuration
 -------------------
 
-1. copy the content of `wazuh-ruleset/27081-django_rules.xml` in `/var/ossec/etc/rules/local_rules.xml`
+1. Copy the content of `wazuh-ruleset/27081-django_rules.xml` in `/var/ossec/etc/rules/local_rules.xml`.
+   Test the triggers with `/var/ossec/bin/ossec-logtest`, copy a log line in stdin and see events.
+
+2. Create an agent group called `django`
+   ````
+   /var/ossec/bin/agent_groups -a -g django
+   ````
+3. Edit agent group configuration this way
+````
+    <localfile>
+	<location>ABSOLUTE_PATH_TO_YOUR_DJANGO_AUDIT_LOG.json</location>
+	<log_format>json</log_format>
+	<label key="@source">django-audit</label>
+</localfile>
+````
+4. Add agents to this group
+   ````
+   /var/ossec/bin/agent_groups -a -i 014 -g django
+   ````
+5. Control when they are synced
+   ````
+   /var/ossec/bin/agent_groups -S -i 014
+   ````
+
+
