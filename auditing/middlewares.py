@@ -1,3 +1,4 @@
+import http
 import logging
 import re
 
@@ -6,47 +7,52 @@ try:
     from django.utils.deprecation import MiddlewareMixin
 except ImportError:
     MiddlewareMixin = object
+from . utils import get_request_info
 
 logger = logging.getLogger(__name__)
 
 
-AUDITING_REQUEST_RESPONSE_KEYS_REGEX = getattr(settings,
-                                               'AUDITING_REQUEST_RESPONSE_KEYS_REGEX',
-                                               r'(HTTP_COOKIE|HTTP_USER_|SERVER_NAME|CSRF_|QUERY_|REMOTE_)')
+#AUDITING_REQUEST_RESPONSE_KEYS_REGEX = getattr(settings,
+                                               #'AUDITING_REQUEST_RESPONSE_KEYS_REGEX',
+                                               #r'(HTTP_COOKIE|HTTP_USER_|SERVER_NAME|CSRF_|QUERY_|REMOTE_)')
+# for i in http.HTTPStatus: print(i, i.value) 
 AUDIT_RESPONSE_HTTPCODES = getattr(settings,
                                    'AUDIT_RESPONSE_HTTPCODES',
-                                   (400,401,402,403,404,500,501,502,503))
+                                   [i.value for i in http.HTTPStatus if i not in (200,201,202,301,302)] )
 AUDIT_REQUEST_POST_IGNORED = ('password', )
 
 
 class HttpHeadersLoggingMiddleware(MiddlewareMixin):
-    
+
     def process_response(self, request, response):
         # request
-        keys = sorted(filter(lambda k: re.match(AUDITING_REQUEST_RESPONSE_KEYS_REGEX, k), request.META))
-        meta = ', '.join("%s=%s" % (k, request.META[k]) for k in keys)
-        logger.debug(meta)
-
+        _msg_path_head = get_request_info(request)
+        #logger.debug(_msg_path_head)
+        
+        _msg_post, _msg_get = '',''
         # request.POST
         if request.POST:
-            _msg = ', '.join(('{}: {}'.format(k,v) for k,v in request.POST.items() if k not in AUDIT_REQUEST_POST_IGNORED))
-            logger.debug('HTTP Request POST: {}'.format(_msg))
-        if request.GET:
-            _msg = ', '.join(('{}: {}'.format(k,v) for k,v in request.GET.items()))
-            logger.debug('HTTP Request GET: {}'.format(_msg))
+            _things = ('{}={}'.format(k,v)
+                       for k,v in request.POST.items()
+                       if k not in AUDIT_REQUEST_POST_IGNORED)
+            _msg_post = ('HTTP Request POST: '
+                         ', '.join(_things) + _msg_path_head)
+            logger.debug(_msg_post)
         
         # response
         status_text = 'STATUS CODE'
         if response.status_code in AUDIT_RESPONSE_HTTPCODES:
-            logger.error('{}: {}'.format(status_text, response.status_code))
-
+            logger.error('{} {}, {} - {}'.format(status_text,
+                                                 response.status_code,
+                                                 _msg_post,
+                                                 _msg_path_head))
         status = '{} {}'.format(response.status_code, status_text)
         response_headers = [(str(k), str(v)) for k, v in response.items()]
-        for c in response.cookies.values():
-            response_headers.append(('Set-Cookie', str(c.output(header=''))))
+        for cookie in response.cookies.values():
+            response_headers.append(('Set-Cookie', str(cookie.output(header=''))))
         head_items = ["{}: {}".format(*hea) for hea in response_headers]
         headers = ', '.join(head_items)
-        logging.debug('{} {} - {} - {} - {}'.format(request.method,
-                                                    request.build_absolute_uri(), meta,
-                                                    status, headers))
+        logging.debug('{} {} - {} - {}'.format(request.method,
+                                               request.build_absolute_uri(),
+                                               status, headers))
         return response

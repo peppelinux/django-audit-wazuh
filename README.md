@@ -55,8 +55,10 @@ LOGGING = {
         'file': {
             'formatter': 'json',
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': './django_siem.log',
+            'maxBytes': 1024000,
+            'backupCount': 3,
         },
         'console': {
             'formatter': 'detailed',
@@ -103,10 +105,22 @@ Results
 You'll get a file with all the relevant events in json format, like
 
 ````
-{"date": "2020-04-20 13:20:00,794", "msg": "Login failed for "adad", next: "/gestione"", "level": "WARNING",  "name": "auditing", "path": "__init__.py.login_failed_logger:22"}
-{"date": "2020-04-20 13:20:01,517", "msg": "STATUS CODE: 404", "level": "ERROR",  "name": "auditing.middlewares", "path": "middlewares.py.process_response:41"}
-{"date": "2020-04-20 13:20:01,521", "msg": "Not Found: /favicon.ico", "level": "WARNING",  "name": "django.request", "path": "log.py.log_response:228"}
-{"date": "2020-04-20 13:20:45,126", "msg": "Login failed for "adad", next: "/gestione"", "level": "WARNING",  "name": "auditing", "path": "__init__.py.login_failed_logger:22"}
-{"date": "2020-04-20 13:20:52,406", "msg": "Login succesfull for "wert", next: "/gestione"", "level": "INFO",  "name": "auditing", "path": "__init__.py.login_logger:15"}
-{"date": "2020-04-20 13:20:55,846", "msg": "Logout succesfull for "wert"", "level": "INFO",  "name": "auditing", "path": "__init__.py.logout_logger:28"}
+{"date": "2020-04-20 15:43:16,089", "msg": "Login failed for "asdfs", next: "/gestione", request: PATH: /gestionelogin/?next=/gestione - HEADERS: Content-Length=130,Content-Type=application/x-www-form-urlencoded,Host=localhost:8000,User-Agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0,Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8,Accept-Language=en-US,en;q=0.5,Accept-Encoding=gzip, deflate,Origin=http://localhost:8000,Connection=keep-alive,Referer=http://localhost:8000/gestionelogin/?next=/gestione,Cookie=csrftoken=reF5MTMlP3d1QSNsCHZvw4NuUAbxSytAdRPv9olRfFdYSttsvM3YU7tVKHam6OOt; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk,Upgrade-Insecure-Requests=1", "level": "WARNING",  "name": "auditing", "path": "__init__.py.login_failed_logger:25"}
+{"date": "2020-04-20 15:43:54,283", "msg": "STATUS CODE 404,  - PATH: /gsadasd - HEADERS: Content-Type=text/plain,Host=localhost:8000,User-Agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0,Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8,Accept-Language=en-US,en;q=0.5,Accept-Encoding=gzip, deflate,Connection=keep-alive,Cookie=csrftoken=reF5MTMlP3d1QSNsCHZvw4NuUAbxSytAdRPv9olRfFdYSttsvM3YU7tVKHam6OOt; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk,Upgrade-Insecure-Requests=1", "level": "ERROR",  "name": "auditing.middlewares", "path": "middlewares.py.process_response:48"}
+````
+
+Tuning
+------
+
+Auditing Middleware can log everything between a http request and its following response.
+These are the overloadable settings variables
+
+````
+# for i in http.HTTPStatus: print(i, i.value) 
+AUDIT_RESPONSE_HTTPCODES = getattr(settings,
+                                   'AUDIT_RESPONSE_HTTPCODES',
+                                   [i.value for i in http.HTTPStatus if i not in (200,201,202,301,302)])
+
+# prevents to read the password in clear
+AUDIT_REQUEST_POST_IGNORED = ('password', )
 ````
