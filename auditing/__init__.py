@@ -11,20 +11,20 @@ logger = logging.getLogger(__name__)
 
 @receiver(user_logged_in)
 def login_logger(sender, request, **kwargs):
-    _msg = '"Login succesful", "username": "{}", {}'
+    _msg = '"Django Login succesful", "username": "{}", {}'
     logger.info(_msg.format(request.POST['username'],
                             get_request_info(request)))
 
 
 @receiver(user_login_failed)
 def login_failed_logger(sender, request, **kwargs):
-    _msg = '"Login failed", "username": "{}", {}'
+    _msg = '"Django Login failed", "username": "{}", {}'
     logger.warn(_msg.format(request.POST['username'],
                             get_request_info(request)))
 
 
 @receiver(user_logged_out)
 def logout_logger(sender, request, **kwargs):
-    _msg = '"Logout succesful", "username": "{}", {}'
+    _msg = '"Django Logout succesful", "username": "{}", {}'
     logger.info(_msg.format(request.user,
                             get_request_info(request)))

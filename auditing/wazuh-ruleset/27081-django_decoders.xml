@@ -4,19 +4,19 @@
 </decoder>
 <decoder name="django-login-failed">
 	<parent>django</parent>
-	<prematch>Login failed</prematch>
+	<prematch>"msg": "Django Login failed"</prematch>
 	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "srcip":(\d+.\d+.\d+.\d+), "path": "(\w+)",</regex>
 	<order>user, url, srcip, path</order>
 </decoder>
 <decoder name="django-login-successful">
 	<parent>django</parent>
-	<prematch>Login successful</prematch>
+	<prematch>"msg": "Django Login successful"</prematch>
 	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "srcip":(\d+.\d+.\d+.\d+), "path": "(\w+)",</regex>
 	<order>user, url, srcip, path</order>
 </decoder>
 <decoder name="django-logout-successful">
 	<parent>django</parent>
-	<prematch>Logout successful</prematch>
+	<prematch>"msg": "Django Logout successful"</prematch>
 	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "srcip":(\d+.\d+.\d+.\d+), "path": "(\w+)",</regex>
 	<order>user, url, srcip, path</order>
 </decoder>
