@@ -2,7 +2,7 @@ django-audit
 ------------
 
 Auditing app, simple as possible, to have a good logging system for security purpose.
-You'll have a json file abe to be processed by a SIEM like Wazuh.
+You'll have a json file abke to be processed by a SIEM like Wazuh or OSSEC.
 
 Setup
 -----
@@ -17,7 +17,7 @@ Configuration
 In `settings.py`:
 
 1. add 'auditing' in `INSTALLED_APPS`
-2. add a Middleware as follows
+2. add a Middleware as follows (not mandatory!)
 3. configure a logging as follows
 
 ````
@@ -104,8 +104,8 @@ You'll get a file with all the relevant events in json format, like
 
 ````
 {"date": "2020-04-20 20:55:13,263", "msg": "Login failed", "username": "aeertr", "url": "https://url.garrlab.it/gestionelogin/?next=/gestione", "srcip": "172.16.16.1", "path": "/gestionelogin/?next=/gestione", "X-Forwarded-Protocol": "https", "Content-Type": "application/x-www-form-urlencoded", "Content-Length": "131", "Host": "url.garrlab.it", "X-Real-Ip": "151.54.177.215", "X-Forwarded-For": "151.54.177.215", "X-Forwarded-Proto": "https", "Connection": "close", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate, br", "Origin": "https://url.garrlab.it", "Referer": "https://url.garrlab.it/gestionelogin/?next=/gestione", "Cookie": "experimentation_subject_id=ImRmMGQ5ZmUzLTMwYTgtNGRhOS1hNDcxLTUwNWVlOTMyODRkYSI%3D--c80cefd3153687b3e91246af9f42877c4bb8191a; csrftoken=4suZBSCsXJIhZZnMKEvomSS6he1kx764t8JWKhYS5FGq2LHY8m4sojPRwLdZUNkV; cookieconsent_status=dismiss", "Upgrade-Insecure-Requests": "1", "level": "WARNING",  "name": "auditing", "path": "__init__.py.login_failed_logger:23", "@source":"django-audit"}
-{"date": "2020-04-20 20:55:41,459", "msg": "Login succesful", "username": "wert", "url": "https://url.garrlab.it/gestionelogin/?next=/gestione", "srcip": "172.16.16.1", "path": "/gestionelogin/?next=/gestione", "X-Forwarded-Protocol": "https", "Content-Type": "application/x-www-form-urlencoded", "Content-Length": "140", "Host": "url.garrlab.it", "X-Real-Ip": "151.54.177.215", "X-Forwarded-For": "151.54.177.215", "X-Forwarded-Proto": "https", "Connection": "close", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate, br", "Origin": "https://url.garrlab.it", "Referer": "https://url.garrlab.it/gestionelogin/?next=/gestione", "Cookie": "experimentation_subject_id=ImRmMGQ5ZmUzLTMwYTgtNGRhOS1hNDcxLTUwNWVlOTMyODRkYSI%3D--c80cefd3153687b3e91246af9f42877c4bb8191a; csrftoken=4suZBSCsXJIhZZnMKEvomSS6he1kx764t8JWKhYS5FGq2LHY8m4sojPRwLdZUNkV; cookieconsent_status=dismiss", "Upgrade-Insecure-Requests": "1", "level": "INFO",  "name": "auditing", "path": "__init__.py.login_logger:16", "@source":"django-audit"}
-{"date": "2020-04-20 20:55:47,831", "msg": "Logout succesful", "username": "wert", "url": "https://url.garrlab.it/gestionelogout/", "srcip": "172.16.16.1", "path": "/gestionelogout/", "X-Forwarded-Protocol": "https", "Host": "url.garrlab.it", "X-Real-Ip": "151.54.177.215", "X-Forwarded-For": "151.54.177.215", "X-Forwarded-Proto": "https", "Connection": "close", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate, br", "Referer": "https://url.garrlab.it/gestione", "Cookie": "experimentation_subject_id=ImRmMGQ5ZmUzLTMwYTgtNGRhOS1hNDcxLTUwNWVlOTMyODRkYSI%3D--c80cefd3153687b3e91246af9f42877c4bb8191a; csrftoken=Uge4kw5L0mrmas1hQw04xMitJnQjRCnMHHabcC5mTnUpbRfiDnPaQ8IBGsgHfJnt; cookieconsent_status=dismiss; sessionid=l32v5zhkry6kdbllrortiq4nbp6lgf99", "Upgrade-Insecure-Requests": "1", "level": "INFO",  "name": "auditing", "path": "__init__.py.logout_logger:30", "@source":"django-audit"}
+{"date": "2020-04-20 20:55:41,459", "msg": "Login successful", "username": "wert", "url": "https://url.garrlab.it/gestionelogin/?next=/gestione", "srcip": "172.16.16.1", "path": "/gestionelogin/?next=/gestione", "X-Forwarded-Protocol": "https", "Content-Type": "application/x-www-form-urlencoded", "Content-Length": "140", "Host": "url.garrlab.it", "X-Real-Ip": "151.54.177.215", "X-Forwarded-For": "151.54.177.215", "X-Forwarded-Proto": "https", "Connection": "close", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate, br", "Origin": "https://url.garrlab.it", "Referer": "https://url.garrlab.it/gestionelogin/?next=/gestione", "Cookie": "experimentation_subject_id=ImRmMGQ5ZmUzLTMwYTgtNGRhOS1hNDcxLTUwNWVlOTMyODRkYSI%3D--c80cefd3153687b3e91246af9f42877c4bb8191a; csrftoken=4suZBSCsXJIhZZnMKEvomSS6he1kx764t8JWKhYS5FGq2LHY8m4sojPRwLdZUNkV; cookieconsent_status=dismiss", "Upgrade-Insecure-Requests": "1", "level": "INFO",  "name": "auditing", "path": "__init__.py.login_logger:16", "@source":"django-audit"}
+{"date": "2020-04-20 20:55:47,831", "msg": "Logout successful", "username": "wert", "url": "https://url.garrlab.it/gestionelogout/", "srcip": "172.16.16.1", "path": "/gestionelogout/", "X-Forwarded-Protocol": "https", "Host": "url.garrlab.it", "X-Real-Ip": "151.54.177.215", "X-Forwarded-For": "151.54.177.215", "X-Forwarded-Proto": "https", "Connection": "close", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate, br", "Referer": "https://url.garrlab.it/gestione", "Cookie": "experimentation_subject_id=ImRmMGQ5ZmUzLTMwYTgtNGRhOS1hNDcxLTUwNWVlOTMyODRkYSI%3D--c80cefd3153687b3e91246af9f42877c4bb8191a; csrftoken=Uge4kw5L0mrmas1hQw04xMitJnQjRCnMHHabcC5mTnUpbRfiDnPaQ8IBGsgHfJnt; cookieconsent_status=dismiss; sessionid=l32v5zhkry6kdbllrortiq4nbp6lgf99", "Upgrade-Insecure-Requests": "1", "level": "INFO",  "name": "auditing", "path": "__init__.py.logout_logger:30", "@source":"django-audit"}
 ````
 
 Tuning
@@ -154,3 +154,4 @@ Wazuh configuration
    ````
    /var/ossec/bin/agent_groups -S -i 014
    ````
+8. Restart Wazuh-manager to reload rulesets `service wazuh-manager restart`
