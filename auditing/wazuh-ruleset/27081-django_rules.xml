@@ -39,7 +39,7 @@
 
   <rule id="100086" level="1">
     <if_sid>100083,100084</if_sid>
-    <match>Logout successful</match>
+    <match>Django Logout successful</match>
     <description>Django logout successful.</description>
     <group>pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,</group>
     <options>no_full_log</options>
@@ -47,15 +47,15 @@
 
   <rule id="100085" level="6">
     <if_sid>100083,100084</if_sid>
-    <match>Login failed</match>
-    <description>Django Authentication attempt.</description>
+    <match>Django Login failed</match>
+    <description>Django Authentication failed.</description>
     <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,</group>
     <options>no_full_log</options>
   </rule>
 
   <rule id="100087" level="6">
     <if_sid>100083,100084</if_sid>
-    <match>Login successful</match>
+    <match>Django Login successful</match>
     <description>Django Authentication successful.</description>
     <group>authentication_success,pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,</group>
     <options>no_full_log</options>
