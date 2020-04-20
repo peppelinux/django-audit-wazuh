@@ -1,13 +1,21 @@
-django-audit
-------------
+Django Audit Wazuh
+------------------
 
 Auditing app, simple as possible, to have a good logging system for security purpose.
-You'll have a json file abke to be processed by a SIEM like Wazuh or OSSEC.
+You'll have a json file able to be processed by a SIEM like Wazuh or OSSEC.
+
+Features
+- Login, logout and bruteforce attempts.
+
+Todo
+- Other critical django.security messages, needs more testing with sane unit tests.
 
 Setup
 -----
 
 ````
+pip install django-audit
+# or
 pip install git+https://github.com/peppelinux/django-audit.git
 ````
 
@@ -139,13 +147,13 @@ Wazuh configuration
    /var/ossec/bin/agent_groups -a -g django
    ````
 5. Edit agent group configuration `/var/ossec/etc/shared/django/agent.conf` this way
-````
-<localfile>
-	<location>ABSOLUTE_PATH_TO_YOUR_DJANGO_AUDIT_LOG.json</location>
-	<log_format>json</log_format>
-	<label key="@source">django-audit</label>
-</localfile>
-````
+   ````
+   <localfile>
+        <location>ABSOLUTE_PATH_TO_YOUR_DJANGO_AUDIT_LOG.json</location>
+        <log_format>json</log_format>
+        <label key="@source">django-audit</label>
+   </localfile>
+   ````
 6. Add agents to this group
    ````
    /var/ossec/bin/agent_groups -a -i 014 -g django
@@ -155,3 +163,21 @@ Wazuh configuration
    /var/ossec/bin/agent_groups -S -i 014
    ````
 8. Restart Wazuh-manager to reload rulesets `service wazuh-manager restart`
+
+
+License
+-------
+
+Apache
+
+
+Authors
+-------
+
+Giuseppe De Marco <giuseppe.demarco@unical.it>
+
+
+Credits
+-------
+
+Garrlab Wazuh SIEM crew

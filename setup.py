@@ -8,14 +8,14 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 # python3 setup.py sdist
-# python3 -m twine upload
+# python3 -m twine upload dist/*
 
 setup(
-    name='django-audit',
-    version='v0.2.2',
+    name='django_audit_wazuh',
+    version='v0.2.4',
     packages=find_packages(),
     include_package_data=True,
-    license='Apache License',
+    license='Apache',
     description="Django Audit",
     long_description=README,
     long_description_content_type='text/markdown',
@@ -27,7 +27,7 @@ setup(
         'Framework :: Django',
         'Framework :: Django :: 3.0',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache License',
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
     ],
