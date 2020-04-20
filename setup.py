@@ -27,7 +27,7 @@ setup(
         'Framework :: Django',
         'Framework :: Django :: 3.0',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: Apache License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
     ],
