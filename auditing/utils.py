@@ -1,5 +1,9 @@
 def get_request_info(request):
-    headers_str = ','.join(['{}={}'.format(k, v)
-                            for k,v in request.headers.items() if v])
-    return 'PATH: {} - HEADERS: {}'.format(request.get_full_path(),
-                                           headers_str)
+    items = dict(request.headers.items())
+    url = items.pop('Origin')  
+    headers_str = ', '.join(['"{}": "{}"'.format(k, v)
+                             for k,v in items if v])
+    return '"url": "{}", "srcip": "{}", "path": "{}", {}'.format(url,
+                                                                 request.META['REMOTE_ADDR'],
+                                                                 request.get_full_path(),
+                                                                 headers_str)

@@ -38,7 +38,7 @@ LOGGING = {
             'format': '[%(asctime)s] %(message)s [(%(levelname)s)] %(args)s %(name)s %(filename)s.%(funcName)s:%(lineno)s]'
         },
         'json': {
-            'format': '{"date": "%(asctime)s", "msg": "%(message)s", "level": "%(levelname)s",  "name": "%(name)s", "path": "%(filename)s.%(funcName)s:%(lineno)s", "@source":"django-audit"}'
+            'format': '{"date": "%(asctime)s", "msg": %(message)s, "level": "%(levelname)s",  "name": "%(name)s", "path": "%(filename)s.%(funcName)s:%(lineno)s", "@source":"django-audit"}'
         },
     },
     'filters': {
@@ -103,8 +103,9 @@ Results
 You'll get a file with all the relevant events in json format, like
 
 ````
-{"date": "2020-04-20 15:43:16,089", "msg": "Login failed for "asdfs", next: "/gestione", request: PATH: /gestionelogin/?next=/gestione - HEADERS: Content-Length=130,Content-Type=application/x-www-form-urlencoded,Host=localhost:8000,User-Agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0,Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8,Accept-Language=en-US,en;q=0.5,Accept-Encoding=gzip, deflate,Origin=http://localhost:8000,Connection=keep-alive,Referer=http://localhost:8000/gestionelogin/?next=/gestione,Cookie=csrftoken=reF5MTMlP3d1QSNsCHZvw4NuUAbxSytAdRPv9olRfFdYSttsvM3YU7tVKHam6OOt; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk,Upgrade-Insecure-Requests=1", "level": "WARNING",  "name": "auditing", "path": "__init__.py.login_failed_logger:25", "@source":"django-audit"}
-{"date": "2020-04-20 15:43:54,283", "msg": "STATUS CODE 404,  - PATH: /gsadasd - HEADERS: Content-Type=text/plain,Host=localhost:8000,User-Agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0,Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8,Accept-Language=en-US,en;q=0.5,Accept-Encoding=gzip, deflate,Connection=keep-alive,Cookie=csrftoken=reF5MTMlP3d1QSNsCHZvw4NuUAbxSytAdRPv9olRfFdYSttsvM3YU7tVKHam6OOt; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk,Upgrade-Insecure-Requests=1", "level": "ERROR",  "name": "auditing.middlewares", "path": "middlewares.py.process_response:48", "@source":"django-audit"}
+{"date": "2020-04-20 20:12:09,040", "msg": "Login failed", "username": "asdsad", "srcip": "127.0.0.1", "path": "/gestionelogin/?next=/gestione", "Content-Length": "133", "Content-Type": "application/x-www-form-urlencoded", "Host": "localhost:8000", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate", "Origin": "http://localhost:8000", "Connection": "keep-alive", "Referer": "http://localhost:8000/gestionelogin/?next=/gestione", "Cookie": "csrftoken=cadNlGt49UETc0vWyGKKwWa1Wlf6YHfhLOqwSq30KCei94wjvRv4o75ZYEgk9J8v; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk", "Upgrade-Insecure-Requests": "1", "level": "WARNING",  "name": "auditing", "path": "__init__.py.login_failed_logger:23", "@source":"django-audit"}
+{"date": "2020-04-20 20:12:19,969", "msg": "Login succesful", "username": "wert", "srcip": "127.0.0.1", "path": "/gestionelogin/?next=/gestione", "Content-Length": "131", "Content-Type": "application/x-www-form-urlencoded", "Host": "localhost:8000", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate", "Origin": "http://localhost:8000", "Connection": "keep-alive", "Referer": "http://localhost:8000/gestionelogin/?next=/gestione", "Cookie": "csrftoken=cadNlGt49UETc0vWyGKKwWa1Wlf6YHfhLOqwSq30KCei94wjvRv4o75ZYEgk9J8v; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk", "Upgrade-Insecure-Requests": "1", "level": "INFO",  "name": "auditing", "path": "__init__.py.login_logger:16", "@source":"django-audit"}
+{"date": "2020-04-20 20:12:22,414", "msg": "Logout succesful", "username": "wert", "srcip": "127.0.0.1", "path": "/gestionelogout/", "Content-Type": "text/plain", "Host": "localhost:8000", "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate", "Connection": "keep-alive", "Referer": "http://localhost:8000/gestione", "Cookie": "csrftoken=yVfTMpY1Bz76F5wZNIGvJzlheIXRyAndh7q9UgbcV6D4egndOWYTu5B1MEaGgtYi; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk; sessionid=26apeh5q3bzztdoy34ad08xorr292hwd", "Upgrade-Insecure-Requests": "1", "level": "INFO",  "name": "auditing", "path": "__init__.py.logout_logger:30", "@source":"django-audit"}
 ````
 
 Tuning
@@ -127,28 +128,29 @@ AUDIT_REQUEST_POST_IGNORED = ('password', )
 Wazuh configuration
 -------------------
 
-1. Copy the content of `wazuh-ruleset/27081-django_rules.xml` in `/var/ossec/etc/rules/local_rules.xml`.
-   Test the triggers with `/var/ossec/bin/ossec-logtest`, copy a log line in stdin and see events.
+1. Copy the content of `wazuh-ruleset/27081-django_decoders.xml` in `/var/ossec/etc/decoders/local_decoder.xml`
 
-2. Create an agent group called `django`
+2. Copy the content of `wazuh-ruleset/27081-django_rules.xml` in `/var/ossec/etc/rules/local_rules.xml`.
+
+3. Test the triggers with `/var/ossec/bin/ossec-logtest`, copy a log line in stdin and see events.
+
+4. Create an agent group called `django`
    ````
    /var/ossec/bin/agent_groups -a -g django
    ````
-3. Edit agent group configuration this way
+5. Edit agent group configuration this way
 ````
-    <localfile>
+<localfile>
 	<location>ABSOLUTE_PATH_TO_YOUR_DJANGO_AUDIT_LOG.json</location>
 	<log_format>json</log_format>
 	<label key="@source">django-audit</label>
 </localfile>
 ````
-4. Add agents to this group
+6. Add agents to this group
    ````
    /var/ossec/bin/agent_groups -a -i 014 -g django
    ````
-5. Control when they are synced
+7. Control when they are synced
    ````
    /var/ossec/bin/agent_groups -S -i 014
    ````
-
-
