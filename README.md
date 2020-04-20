@@ -122,3 +122,9 @@ AUDIT_RESPONSE_HTTPCODES = getattr(settings,
 # prevents to read the password in clear
 AUDIT_REQUEST_POST_IGNORED = ('password', )
 ````
+
+
+Wazuh configuration
+-------------------
+
+1. copy the content of `wazuh-ruleset/27081-django_rules.xml` in `/var/ossec/etc/rules/local_rules.xml`

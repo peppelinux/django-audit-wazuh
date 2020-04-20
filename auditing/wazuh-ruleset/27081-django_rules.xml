@@ -1,0 +1,72 @@
+<!--
+-  Django ruleset
+-  Created by Giuseppe De Marco <giuseppe.demarco@unical.it>.
+-  Copyright (C) 2015-2020, Wazuh Inc.
+-  This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2.
+-->
+<!--
+- It's needed to install and configure django-audit
+- It's needed to put it in the 
+- It's needed to paste the following in /var/ossec/etc/ossec.conf or agents.conf to work properly:
+<localfile>
+	<location>ABSOLUTE_PATH_TO_YOUR_DJANGO_AUDIT_LOG.json</location>
+	<log_format>json</log_format>
+	<label key="@source">django-audit</label>
+</localfile>
+ -->
+
+<!-- ID: 100083 - 100087 -->
+
+<!-- EXAMPLE LOGS
+{"date": "2020-04-20 15:43:16,089", "msg": "Login failed for "asdfs", next: "/gestione", request: PATH: /gestionelogin/?next=/gestione - HEADERS: Content-Length=130,Content-Type=application/x-www-form-urlencoded,Host=localhost:8000,User-Agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0,Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8,Accept-Language=en-US,en;q=0.5,Accept-Encoding=gzip, deflate,Origin=http://localhost:8000,Connection=keep-alive,Referer=http://localhost:8000/gestionelogin/?next=/gestione,Cookie=csrftoken=reF5MTMlP3d1QSNsCHZvw4NuUAbxSytAdRPv9olRfFdYSttsvM3YU7tVKHam6OOt; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk,Upgrade-Insecure-Requests=1", "level": "WARNING",  "name": "auditing", "path": "__init__.py.login_failed_logger:25", "@source":"django-audit"}
+{"date": "2020-04-20 15:43:54,283", "msg": "STATUS CODE 404,  - PATH: /gsadasd - HEADERS: Content-Type=text/plain,Host=localhost:8000,User-Agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0,Accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8,Accept-Language=en-US,en;q=0.5,Accept-Encoding=gzip, deflate,Connection=keep-alive,Cookie=csrftoken=reF5MTMlP3d1QSNsCHZvw4NuUAbxSytAdRPv9olRfFdYSttsvM3YU7tVKHam6OOt; cookieconsent_status=dismiss; session=eyJvcF9oYXNoIjoiZGphbmdvX29pZGNfb3AifQ.XpxTJA.hqdgNaC8h_p_iwihldXJgrdjwRk,Upgrade-Insecure-Requests=1", "level": "ERROR",  "name": "auditing.middlewares", "path": "middlewares.py.process_response:48", "@source":"django-audit"}
+-->
+
+<group name="json,">
+
+  <rule id="100083" level="0">
+    <decoded_as>json</decoded_as>
+    <field name="@source">django-audit</field>
+    <description>Django messages grouped.</description>
+    <options>no_full_log</options>
+  </rule>
+
+  <rule id="100084" level="0">
+    <decoded_as>json</decoded_as>
+    <description>Django messages grouped.</description>
+    <options>no_full_log</options>
+  </rule>
+
+  <rule id="100086" level="1">
+    <if_sid>100083,100084</if_sid>
+    <match>Logout successful</match>
+    <description>Django logout successful.</description>
+    <group>pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,</group>
+    <options>no_full_log</options>
+  </rule>
+
+  <rule id="100085" level="6">
+    <if_sid>100083,100084</if_sid>
+    <match>Login failed </match>
+    <description>Django Authentication attempt.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,</group>
+    <options>no_full_log</options>
+  </rule>
+
+  <rule id="100087" level="6">
+    <if_sid>100083,100084</if_sid>
+    <match>Login successful </match>
+    <description>Django Authentication successful.</description>
+    <group>authentication_success,pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,</group>
+    <options>no_full_log</options>
+  </rule>
+
+  <rule id="100088" level="10" frequency="8" timeframe="120">
+    <if_matched_sid>100085</if_matched_sid>
+    <description>Django Brute Force (multiple failed logins).</description>
+    <group>authentication_failures,pci_dss_10.2.4,pci_dss_10.2.5,pci_dss_11.4,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,nist_800_53_SI.4,</group>
+    <options>no_full_log</options>
+  </rule>
+</group>
+
+<!-- END Django ruleset -->

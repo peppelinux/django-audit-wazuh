@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 @receiver(user_logged_in)
 def login_logger(sender, request, **kwargs):
-    _msg = 'Login succesfull for "{}", next: "{}", request: {}'
+    _msg = 'Login succesful for "{}", next: "{}", request: {}'
     logger.info(_msg.format(request.POST['username'],
                             request.POST['next'],
                             get_request_info(request)))
@@ -27,5 +27,5 @@ def login_failed_logger(sender, request, **kwargs):
 
 @receiver(user_logged_out)
 def logout_logger(sender, request, **kwargs):
-    _msg = 'Logout succesfull for "{}"'
+    _msg = 'Logout succesful for "{}"'
     logger.info(_msg.format(request.user))
