@@ -165,6 +165,32 @@ Wazuh configuration
 8. Restart Wazuh-manager to reload rulesets `service wazuh-manager restart`
 
 
+GeoIP
+-----
+
+On wazuh-manager, edit /usr/share/filebeat/module/wazuh/alerts/ingest/pipeline.json adding the new IP field inside processors, along the other Geolocation fields:
+````
+    {
+      "geoip": {
+        "field": "srcip",
+        "target_field": "GeoLocation",
+        "properties": ["city_name", "country_name", "region_name", "location"],
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+````
+
+We now need to delete the current pipeline. In Kibana, go to Dev Tools clicking on the Wrench icon. Then execute the following:
+````
+DELETE _ingest/pipeline/filebeat-7.6.2-wazuh-alerts-pipeline
+````
+
+We restart Filebeat in wazuh-manager:
+````
+systemctl restart filebeat
+````
+
 License
 -------
 
