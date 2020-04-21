@@ -5,18 +5,18 @@
 <decoder name="django-login-failed">
 	<parent>django</parent>
 	<prematch>"msg": "Django Login failed"</prematch>
-	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "srcip": "(\d+.\d+.\d+.\d+)", "path": "(\w+)",</regex>
-	<order>user, url, srcip, path</order>
+	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "data.srcip": "(\d+.\d+.\d+.\d+)", "path": "(\w+)",</regex>
+	<order>user, url, data.srcip, path</order>
 </decoder>
 <decoder name="django-login-successful">
 	<parent>django</parent>
 	<prematch>"msg": "Django Login successful"</prematch>
-	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "srcip": "(\d+.\d+.\d+.\d+)", "path": "(\w+)",</regex>
-	<order>user, url, srcip, path</order>
+	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "data.srcip": "(\d+.\d+.\d+.\d+)", "path": "(\w+)",</regex>
+	<order>user, url, data.srcip, path</order>
 </decoder>
 <decoder name="django-logout-successful">
 	<parent>django</parent>
 	<prematch>"msg": "Django Logout successful"</prematch>
-	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "srcip": "(\d+.\d+.\d+.\d+)", "path": "(\w+)",</regex>
-	<order>user, url, srcip, path</order>
+	<regex offset="after_prematch">"username": "(\w+)", "url": "(\w+)", "data.srcip": "(\d+.\d+.\d+.\d+)", "path": "(\w+)",</regex>
+	<order>user, url, data.srcip, path</order>
 </decoder>

@@ -12,7 +12,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django_audit_wazuh',
-    version='v0.2.4',
+    version='v0.2.6',
     packages=find_packages(),
     include_package_data=True,
     license='Apache',
