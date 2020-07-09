@@ -14,9 +14,9 @@ Setup
 -----
 
 ````
-pip install django-audit
+pip install django-audit-wazuh
 # or
-pip install git+https://github.com/peppelinux/django-audit.git
+pip install git+https://github.com/peppelinux/django-audit-wazuh.git
 ````
 
 Configuration
