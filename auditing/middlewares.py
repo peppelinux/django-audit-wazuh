@@ -1,6 +1,7 @@
 import http
 import logging
 import re
+import json
 
 from django.conf import settings
 try:
@@ -49,7 +50,12 @@ class HttpHeadersLoggingMiddleware(MiddlewareMixin):
         response_headers = [(str(k), str(v)) for k, v in response.items()]
         for cookie in response.cookies.values():
             response_headers.append(('Set-Cookie', str(cookie.output(header=''))))
-        head_items = ['"{}": "{}"'.format(*hea) for hea in response_headers]
+
+        head_items = [
+            # Use json.dumps on value field below to ensure valid json
+            '"{}": "{}"'.format(k, json.dumps(v))
+            for k, v in response_headers
+        ]
         headers = ', '.join(head_items)
         _msg = '"Http Response", "method": "{}", "url": "{}", "status": "{}", {}'.format(request.method,
                                                                                          request.build_absolute_uri(),
