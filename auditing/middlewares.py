@@ -21,7 +21,10 @@ AUDIT_RESPONSE_HTTPCODES = getattr(settings,
                                    'AUDIT_RESPONSE_HTTPCODES',
                                    [i.value for i in http.HTTPStatus
                                     if i not in (200,201,202,301,302)] )
-AUDIT_REQUEST_POST_IGNORED = ('password', )
+
+AUDIT_REQUEST_POST_IGNORED = getattr(settings,
+                                     'AUDIT_REQUEST_POST_IGNORED',
+                                     ('password', 'password1', 'password2'))
 
 
 class HttpHeadersLoggingMiddleware(MiddlewareMixin):
