@@ -5,7 +5,7 @@ from django import http
 from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
 
-from .middlewares import http_headers_logging_middleware
+from .middleware import http_headers_logging_middleware
 from .utils import get_request_info, format_log_message
 from . import login_logger, login_failed_logger, logout_logger
 
@@ -301,7 +301,7 @@ class HTTPHeadersLoggingMiddlewareTestCase(TestCase):
 
         # Verify that 1 log entry was generated
         self.assertEqual(1, len(cm.output))
-        self.assertIn('DEBUG:auditing.middlewares:"Http Response"', cm.output[0])
+        self.assertIn('DEBUG:auditing.middleware:"Http Response"', cm.output[0])
 
     def test_post_request(self):
         request = self.rf.post('/', {
