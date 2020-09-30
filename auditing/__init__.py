@@ -32,6 +32,12 @@ def login_failed_logger(sender, **kwargs):
 @receiver(user_logged_out)
 def logout_logger(sender, **kwargs):
     msg_data = get_request_info(kwargs['request'])
-    msg_data['username'] = kwargs['user'].get_username()
-    logger.info('"Django Logout successful", {}'.format(
-        format_log_message(msg_data)))
+    user = kwargs.get('user', None)
+
+    if user is not None:
+        msg_data['username'] = user.get_username()
+        logger.info('"Django Logout successful", {}'.format(
+            format_log_message(msg_data)))
+    else:
+        logger.debug('"Django Logout failed", {}'.format(
+            format_log_message(msg_data)))

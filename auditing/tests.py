@@ -251,6 +251,19 @@ class LogoutLoggerReceiverTestCase(SignalsBaseTestCase):
         self.assertIn('"srcip": "127.0.0.1"', out)
         self.assertIn('"username": "tester"', out)
 
+    def test_logout_refresh_by_user(self):
+        """
+        It's possible that a user can refresh the logout page. This will cause
+        the signal to fire again and we need to test that this doesn't raise
+        errors because the user will be None in this case.
+        """
+        req = self._post()
+
+        with self.assertLogs('auditing', level='DEBUG') as cm:
+            logout_logger(self.mock_sender, user=None, request=req)
+
+        self.assertIn('DEBUG:auditing:"Django Logout failed"', cm.output[0])
+
     def test_ignored_fields(self):
         req = self._post(data={
             'username': 'tester',
