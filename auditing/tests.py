@@ -1,8 +1,11 @@
 import json
 from unittest.mock import Mock
+
+from django import http
 from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
 
+from .middlewares import http_headers_logging_middleware
 from .utils import get_request_info, format_log_message
 from . import login_logger, login_failed_logger, logout_logger
 
@@ -18,7 +21,7 @@ class GetRequestInfoTestCase(TestCase):
 
         self.assertIsInstance(req_data, dict)
 
-    def test_siem_data(self):
+    def test_msg_data(self):
         request = self.rf.get('/login/')
         request.META['REMOTE_ADDR'] = '127.0.0.1'
         req_data = get_request_info(request)
@@ -61,7 +64,7 @@ class FormatMessageTestCase(TestCase):
     """
     Test cases for the `format_log_message` function
     """
-    SIEM_DATA = {
+    MSG_DATA = {
         "Cookie": "",
         "path": "/login/",
         "url": "http://testserver/login/",
@@ -69,14 +72,14 @@ class FormatMessageTestCase(TestCase):
     }
 
     def test_returns_valid_json_with_brackets(self):
-        msg = format_log_message(self.SIEM_DATA)
+        msg = format_log_message(self.MSG_DATA)
         try:
             json.loads('{' + msg + '}')
         except json.decoder.JSONDecodeError:
             self.fail("Message string is not valid JSON")
 
     def test_returns_string_without_brackets(self):
-        msg = format_log_message(self.SIEM_DATA)
+        msg = format_log_message(self.MSG_DATA)
         self.assertNotEqual(msg[0], '{')
         self.assertNotEqual(msg[-1], '}')
         self.assertEqual(
@@ -282,14 +285,70 @@ class LogoutLoggerReceiverTestCase(SignalsBaseTestCase):
         self.assertIn('"username": "user@example.com"', cm.output[0])
 
 
-# TODO
-# class HTTPHeadersLoggingMiddlewareTestCase(TestCase):
-#
-#     def setUp(self):
-#         # self.request = Mock()
-#         self.rf = RequestFactory()
-#         self.middleware = HttpHeadersLoggingMiddleware()
-#
-#     def test_middleware_request(self):
-#         request = rf.get('/login/')
-#         response = self.middleware.process_response(request)
+class HTTPHeadersLoggingMiddlewareTestCase(TestCase):
+
+    def setUp(self):
+        self.rf = RequestFactory()
+
+    def test_middleware_get_request(self):
+        request = self.rf.get('/')
+
+        middleware = http_headers_logging_middleware(
+            lambda r: http.HttpResponse('200 Success'))
+
+        with self.assertLogs('auditing', level='DEBUG') as cm:
+            response = middleware(request)
+
+        # Verify that 1 log entry was generated
+        self.assertEqual(1, len(cm.output))
+        self.assertIn('DEBUG:auditing.middlewares:"Http Response"', cm.output[0])
+
+    def test_post_request(self):
+        request = self.rf.post('/', {
+            "email": "user@example.com",
+            "password": "secret",
+        })
+
+        middleware = http_headers_logging_middleware(
+            lambda r: http.HttpResponseRedirect('/success/'))
+
+        with self.assertLogs('auditing', level='DEBUG') as cm:
+            response = middleware(request)
+
+        self.assertEqual(2, len(cm.output))
+        self.assertIn('"Http Request POST",', cm.output[0])
+        self.assertNotIn('"password"', cm.output[0])
+
+    def test_important_status_codes_get(self):
+        request = self.rf.get('/')
+
+        middleware = http_headers_logging_middleware(
+            lambda r: http.HttpResponseForbidden())
+
+        with self.assertLogs('auditing', level='ERROR') as cm:
+            response = middleware(request)
+
+        self.assertIn('"Http Response",', cm.output[0])
+        self.assertIn('"status": 403', cm.output[0])
+
+    def test_important_status_codes_post(self):
+        request = self.rf.post('/', {
+            "email": "user@example.com",
+            "password": "secret",
+        })
+
+        middleware = http_headers_logging_middleware(
+            lambda r: http.HttpResponseForbidden('/'))
+
+        with self.assertLogs('auditing', level='ERROR') as cm:
+            response = middleware(request)
+
+        self.assertIn('"Http Response",', cm.output[0])
+        self.assertIn('"status": 403', cm.output[0])
+
+        # Since it was a post message, check that these were included
+        self.assertIn('"post": {', cm.output[0])
+        self.assertIn('"email": "user@example.com"', cm.output[0])
+
+        # Sensitive info should still be stripped
+        self.assertNotIn('"password"', cm.output[0])
