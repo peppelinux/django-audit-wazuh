@@ -14,24 +14,24 @@ logger = logging.getLogger(__name__)
 
 @receiver(user_logged_in)
 def login_logger(sender, **kwargs):
-    siem_data = get_request_info(kwargs['request'])
-    siem_data['username'] = kwargs['user'].get_username()
+    msg_data = get_request_info(kwargs['request'])
+    msg_data['username'] = kwargs['user'].get_username()
     logger.info('"Django Login successful", {}'.format(
-        format_log_message(siem_data)))
+        format_log_message(msg_data)))
 
 
 @receiver(user_login_failed)
 def login_failed_logger(sender, **kwargs):
     USER_FIELD = getattr(settings, 'AUDIT_USERNAME_FIELD', 'username')
-    siem_data = get_request_info(kwargs['request'])
-    siem_data['username'] = kwargs['credentials'][USER_FIELD]
+    msg_data = get_request_info(kwargs['request'])
+    msg_data['username'] = kwargs['credentials'][USER_FIELD]
     logger.warn('"Django Login failed", {}'.format(
-        format_log_message(siem_data)))
+        format_log_message(msg_data)))
 
 
 @receiver(user_logged_out)
 def logout_logger(sender, **kwargs):
-    siem_data = get_request_info(kwargs['request'])
-    siem_data['username'] = kwargs['user'].get_username()
+    msg_data = get_request_info(kwargs['request'])
+    msg_data['username'] = kwargs['user'].get_username()
     logger.info('"Django Logout successful", {}'.format(
-        format_log_message(siem_data)))
+        format_log_message(msg_data)))

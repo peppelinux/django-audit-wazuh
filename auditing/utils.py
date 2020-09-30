@@ -21,10 +21,10 @@ def get_request_info(request):
     srcip = r_head.get("X-Forwarded-For") or r_head.get("X-Real-Ip", srcip)
 
     url = request.build_absolute_uri()
-    siem_data = {
+    msg_data = {
         "url": url,
         "srcip": str(srcip),
         "path": request.get_full_path(),
     }
-    siem_data.update(r_head)
-    return siem_data
+    msg_data.update(r_head)
+    return msg_data
