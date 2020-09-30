@@ -1,4 +1,10 @@
 import json
+try:
+    # TODO: Should we add ipware as a hard dependency?
+    # It provides some good features which coule be handy for this library
+    from ipware import get_client_ip
+except ImportError:
+    get_client_ip = None
 
 
 def format_log_message(msg_data):
@@ -17,8 +23,11 @@ def get_request_info(request):
     """
     r_head = dict(request.headers.items())
 
-    srcip = request.META['REMOTE_ADDR']
-    srcip = r_head.get("X-Forwarded-For") or r_head.get("X-Real-Ip", srcip)
+    if get_client_ip:
+        srcip, is_routable = get_client_ip(request)
+    else:
+        srcip = request.META['REMOTE_ADDR']
+        srcip = r_head.get("X-Forwarded-For") or r_head.get("X-Real-Ip", srcip)
 
     url = request.build_absolute_uri()
     msg_data = {
