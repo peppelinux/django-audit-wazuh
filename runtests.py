@@ -29,7 +29,7 @@ _TEST_SETTINGS = {
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'auditing.middlewares.http_headers_logging_middleware',
+        'auditing.middleware.http_headers_logging_middleware',
     ),
 
     'TEMPLATES': [
