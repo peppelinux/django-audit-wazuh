@@ -1,6 +1,12 @@
 Django Audit Wazuh
 ------------------
 
+![CI build](https://github.com/peppelinux/django-audit-wazuh/workflows/djangosaml2/badge.svg)
+![pypi](https://img.shields.io/pypi/v/django-audit-wazuh.svg)
+![Python version](https://img.shields.io/badge/license-Apache%202-blue.svg)
+![Django versions](https://img.shields.io/pypi/djversions/django-audit-wazuh)
+![License](https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9-blue.svg)
+
 Auditing app, simple as possible, to have a good logging system for security purpose.
 You'll have a json file able to be processed by a SIEM like Wazuh or OSSEC.
 
