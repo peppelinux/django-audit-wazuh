@@ -1,7 +1,7 @@
 Django Audit Wazuh
 ------------------
 
-![CI build](https://github.com/peppelinux/django-audit-wazuh/workflows/djangosaml2/badge.svg)
+![CI build](https://github.com/peppelinux/django-audit-wazuh/workflows/django-audit-wazuh/badge.svg)
 ![pypi](https://img.shields.io/pypi/v/django-audit-wazuh.svg)
 ![Python version](https://img.shields.io/badge/license-Apache%202-blue.svg)
 ![Django versions](https://img.shields.io/pypi/djversions/django-audit-wazuh)
