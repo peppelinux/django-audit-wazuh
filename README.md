@@ -123,7 +123,7 @@ Auditing Middleware can log everything between a http request and its following 
 These are the overloadable settings variables
 
 ````
-# for i in http.HTTPStatus: print(i, i.value) 
+# for i in http.HTTPStatus: print(i, i.value)
 AUDIT_RESPONSE_HTTPCODES = getattr(settings,
                                    'AUDIT_RESPONSE_HTTPCODES',
                                    [i.value for i in http.HTTPStatus if i not in (200,201,202,301,302)])
@@ -194,7 +194,7 @@ systemctl restart filebeat
 License
 -------
 
-Apache
+Apache 2.0
 
 
 Authors
