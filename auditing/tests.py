@@ -159,21 +159,6 @@ class LoginLoggerReceiverTestCase(SignalsBaseTestCase):
         self.assertNotIn('"password1":', out)
         self.assertNotIn('"password2":', out)
 
-    @override_settings(AUDIT_USERNAME_FIELD='email')
-    def test_message_custom_user_field(self):
-        req = self._post(data={
-            "email": "user@example.com",
-            "password": "secret",
-        })
-
-        with self.assertLogs('auditing', level='INFO') as cm:
-            login_logger(
-                self.mock_sender,
-                user=MockUser(username='user@example.com'),
-                request=req)
-
-        self.assertIn('"username": "user@example.com"', cm.output[0])
-
 
 class LoginFailedLoggerReceiverTestCase(SignalsBaseTestCase):
 
@@ -313,21 +298,6 @@ class LogoutLoggerReceiverTestCase(SignalsBaseTestCase):
         self.assertNotIn('"password":', out)
         self.assertNotIn('"password1":', out)
         self.assertNotIn('"password2":', out)
-
-    @override_settings(AUDIT_USERNAME_FIELD='email')
-    def test_message_custom_user_field(self):
-        req = self._post(data={
-            "email": "user@example.com",
-            "password": "secret",
-        })
-
-        with self.assertLogs('auditing', level='INFO') as cm:
-            logout_logger(
-                self.mock_sender,
-                user=MockUser('user@example.com'),
-                request=req)
-
-        self.assertIn('"username": "user@example.com"', cm.output[0])
 
 
 class HTTPHeadersLoggingMiddlewareTestCase(TestCase):
