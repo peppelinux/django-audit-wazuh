@@ -22,9 +22,20 @@ def login_logger(sender, **kwargs):
 
 @receiver(user_login_failed)
 def login_failed_logger(sender, **kwargs):
-    USER_FIELD = getattr(settings, 'AUDIT_USERNAME_FIELD', 'username')
+
+    def get_username_in(credentials: dict):
+        """
+        Find the username in credentials dict based on list of valid username
+        keys.
+        """
+        USER_FIELDS = getattr(settings, 'AUDIT_USERNAME_FIELDS', ['username'])
+        for key in USER_FIELDS:
+            if key in credentials.keys():
+                return credentials[key]
+        raise KeyError("Valid username not found in credentials.")
+
     msg_data = get_request_info(kwargs['request'])
-    msg_data['username'] = kwargs['credentials'][USER_FIELD]
+    msg_data['username'] = get_username_in(kwargs['credentials'])
     logger.warn('"Django Login failed", {}'.format(
         format_log_message(msg_data)))
 

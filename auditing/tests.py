@@ -218,7 +218,7 @@ class LoginFailedLoggerReceiverTestCase(SignalsBaseTestCase):
         self.assertNotIn('"password1": ', out)
         self.assertNotIn('"password2": ', out)
 
-    @override_settings(AUDIT_USERNAME_FIELD='email')
+    @override_settings(AUDIT_USERNAME_FIELDS=['email'])
     def test_message_custom_user_field(self):
         req = self._post(data={
             "email": "user@example.com",
@@ -232,6 +232,38 @@ class LoginFailedLoggerReceiverTestCase(SignalsBaseTestCase):
                 request=req)
 
         self.assertIn('"username": "wrong"', cm.output[0])
+
+    @override_settings(AUDIT_USERNAME_FIELDS=['email', 'username'])
+    def test_message_fallback_user_field(self):
+        req = self._post(data={
+            "username": "tester",
+            "password": "secret",
+        })
+
+        with self.assertLogs('auditing', level='INFO') as cm:
+            login_failed_logger(
+                self.mock_sender,
+                credentials={'username': 'wrong', 'password': '************'},
+                request=req)
+
+        self.assertIn('"username": "wrong"', cm.output[0])
+
+    @override_settings(AUDIT_USERNAME_FIELDS=['email'])
+    def test_user_field_not_found_raises_error(self):
+        req = self._post(data={
+            "username": "tester",
+            "password": "secret",
+        })
+
+        with self.assertRaises(KeyError) as err:
+            login_failed_logger(
+                self.mock_sender,
+                credentials={'username': 'wrong', 'password': '************'},
+                request=req)
+
+        self.assertEqual(
+            "'Valid username not found in credentials.'",
+            str(err.exception))
 
 
 class LogoutLoggerReceiverTestCase(SignalsBaseTestCase):
